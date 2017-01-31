@@ -1,9 +1,11 @@
 from yahoo_finance import Share
 
-purchase_date = '2017-01-30'
-shares = {'LSCC' : 1,
-          'OSUR' : 1,
-          'SID' : 2}
+f = open('portfolio.txt','r')
+lines = [e[:-1].split() for e in f.readlines()]
+purchase_date = lines[0][0]
+shares = dict()
+for [ticker,amt] in lines[1:]:
+    shares[ticker] = int(amt)
 
 purchase_prices = dict()
 current_prices = dict()
@@ -25,11 +27,8 @@ for e in shares:
             ppps,value_at_purchase)
 print 'Total stock value: $%.4f'%total_value_at_purchase
 
-print ''
-
-#today_date = Share('YHOO').get_trade_datetime().split()[0]
 today_date = Share('YHOO').get_trade_datetime()
-print 'AT PRESENT (%s):'%(today_date)
+print '\nAT PRESENT (%s):'%(today_date)
 total_stock_value = 0.0
 for e in shares:
     this_value = shares[e] * current_prices[e]
